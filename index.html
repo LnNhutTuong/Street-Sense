@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b1120" />
+    <title>Smart Streetlight | IoT Dashboard</title>
+    <meta
+      name="description"
+      content="Dashboard giám sát hệ thống đèn đường thông minh ESP32 và ThingSpeak."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#" aria-label="Smart Streetlight trang chủ">
+          <span class="brand-mark">✦</span>
+          <span
+            ><strong>Street<span>Sense</span></strong
+            ><small>IoT MONITORING</small></span
+          >
+        </a>
+        <div class="side-label">MENU CHÍNH</div>
+        <a class="nav-item active" href="#overview"><span>▦</span> Tổng quan</a>
+        <a class="nav-item" href="#charts"><span>⌁</span> Biểu đồ cảm biến</a>
+        <a class="nav-item" href="#devices"
+          ><span>☼</span> Trạng thái thiết bị</a
+        >
+        <div class="sidebar-bottom">
+          <div class="connection-card">
+            <span class="pulse-dot"></span>
+            <div>
+              <strong id="sideConnection">Đang kiểm tra</strong
+              ><small>ThingSpeak Channel</small>
+            </div>
+          </div>
+          <div class="channel-label">CHANNEL ID</div>
+          <div class="channel-id">
+            3536040
+            <button
+              id="copyChannel"
+              title="Sao chép Channel ID"
+              aria-label="Sao chép Channel ID"
+            >
+              ⧉
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <div class="eyebrow">IOT / GIÁM SÁT TỪ XA</div>
+            <h1>
+              Smart Streetlight <span class="live-badge"><i></i> LIVE</span>
+            </h1>
+            <p class="subtitle">
+              Theo dõi môi trường và hệ thống đèn đường theo thời gian thực.
+            </p>
+          </div>
+          <div class="top-actions">
+            <div class="last-update">
+              <span class="muted">Cập nhật gần nhất</span
+              ><strong id="lastUpdated">Đang tải...</strong>
+            </div>
+            <button
+              class="icon-button"
+              id="refreshBtn"
+              title="Làm mới dữ liệu"
+              aria-label="Làm mới dữ liệu"
+            >
+              ↻
+            </button>
+          </div>
+        </header>
+
+        <section class="status-strip">
+          <div class="status-left">
+            <span class="status-indicator" id="connectionDot"></span
+            ><span id="connectionText">Đang kết nối ThingSpeak...</span>
+          </div>
+          <div class="status-right">
+            <span class="tiny-label">DỮ LIỆU MỚI NHẤT</span
+            ><span id="entryId">Entry: --</span><span class="divider"></span
+            ><span id="dataTimestamp">Thời gian: --</span>
+          </div>
+        </section>
+
+        <section id="overview">
+          <div class="section-heading">
+            <div>
+              <span class="section-kicker">ENVIRONMENT</span>
+              <h2>Tổng quan môi trường</h2>
+            </div>
+            <span class="section-note">Dữ liệu từ 8 fields ThingSpeak</span>
+          </div>
+          <div class="metric-grid">
+            <article class="metric-card">
+              <div class="metric-top">
+                <span class="metric-icon orange">♨</span
+                ><span class="metric-label">NHIỆT ĐỘ</span
+                ><span class="metric-trend">FIELD 2</span>
+              </div>
+              <div class="metric-value">
+                <span id="temperature">--</span><small>°C</small>
+              </div>
+              <div class="metric-foot">
+                <span class="mini-line orange-line"></span
+                ><span id="temperatureHint">Nhiệt độ môi trường</span>
+              </div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-top">
+                <span class="metric-icon blue">◌</span
+                ><span class="metric-label">ĐỘ ẨM</span
+                ><span class="metric-trend">FIELD 3</span>
+              </div>
+              <div class="metric-value">
+                <span id="humidity">--</span><small>%</small>
+              </div>
+              <div class="metric-foot">
+                <span class="mini-line blue-line"></span
+                ><span id="humidityHint">Độ ẩm không khí</span>
+              </div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-top">
+                <span class="metric-icon violet">☼</span
+                ><span class="metric-label">CƯỜNG ĐỘ LDR</span
+                ><span class="metric-trend">FIELD 1</span>
+              </div>
+              <div class="metric-value">
+                <span id="ldr">--</span><small>ADC</small>
+              </div>
+              <div class="metric-foot">
+                <span class="mini-line violet-line"></span
+                ><span id="lightHint">Thang đo 0–4095</span>
+              </div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-top">
+                <span class="metric-icon green">◉</span
+                ><span class="metric-label">MỨC SƯƠNG MÙ</span
+                ><span class="metric-trend">FIELD 4</span>
+              </div>
+              <div class="fog-value">
+                <span class="fog-dot" id="fogDot"></span
+                ><strong id="fogLevel">Đang tải</strong>
+              </div>
+              <div class="metric-foot">
+                <span class="mini-line green-line"></span
+                ><span id="fogHint">Phân loại theo ngưỡng cảm biến</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="middle-grid" id="devices">
+          <article class="panel lighting-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="section-kicker">LIGHTING CONTROL</span>
+                <h2>Hệ thống chiếu sáng</h2>
+              </div>
+              <span class="panel-icon">☼</span>
+            </div>
+            <div class="streetlight-status">
+              <div class="streetlight-illustration" aria-hidden="true">
+                <span class="lamp lamp-one"></span
+                ><span class="lamp lamp-two"></span
+                ><span class="lamp lamp-three"></span
+                ><span class="road-line"></span>
+              </div>
+              <div class="streetlight-summary">
+                <strong id="yellowCount">-- / 3</strong
+                ><span>Đèn đường đang bật</span>
+                <div class="progress-track">
+                  <span id="yellowProgress"></span>
+                </div>
+              </div>
+            </div>
+            <div class="device-list">
+              <div class="device-row">
+                <span class="device-symbol yellow-symbol">●</span>
+                <div class="device-name">
+                  <strong>Đèn vàng 1</strong><small>GPIO 16</small>
+                </div>
+                <span class="device-state" id="yellow1State">--</span>
+              </div>
+              <div class="device-row">
+                <span class="device-symbol yellow-symbol">●</span>
+                <div class="device-name">
+                  <strong>Đèn vàng 2</strong><small>GPIO 17</small>
+                </div>
+                <span class="device-state" id="yellow2State">--</span>
+              </div>
+              <div class="device-row">
+                <span class="device-symbol yellow-symbol">●</span>
+                <div class="device-name">
+                  <strong>Đèn vàng 3</strong><small>GPIO 18</small>
+                </div>
+                <span class="device-state" id="yellow3State">--</span>
+              </div>
+            </div>
+            <div class="ambient-state">
+              <span class="ambient-icon">☾</span>
+              <div>
+                <strong id="skyState">--</strong
+                ><small>Trạng thái ánh sáng môi trường · Field 5</small>
+              </div>
+              <span class="state-pill" id="darkPill">--</span>
+            </div>
+          </article>
+
+          <article class="panel fog-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="section-kicker">FOG SAFETY</span>
+                <h2>Hệ thống cảnh báo sương mù</h2>
+              </div>
+              <span class="panel-icon">⌁</span>
+            </div>
+            <div class="fog-banner" id="fogBanner">
+              <div class="fog-art" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
+              <div>
+                <span class="tiny-label">TRẠNG THÁI HIỆN TẠI</span
+                ><strong id="fogBannerText">Đang chờ dữ liệu</strong
+                ><small id="fogBannerDesc"
+                  >Dữ liệu sẽ xuất hiện sau khi tải thành công.</small
+                >
+              </div>
+            </div>
+            <div class="device-list">
+              <div class="device-row">
+                <span class="device-symbol blue-symbol">●</span>
+                <div class="device-name">
+                  <strong>Đèn xanh cảnh báo</strong
+                  ><small>GPIO 23 · Field 7</small>
+                </div>
+                <span class="device-state" id="blueState">--</span>
+              </div>
+              <div class="device-row">
+                <span class="device-symbol red-symbol">●</span>
+                <div class="device-name">
+                  <strong>Đèn đỏ phá sương</strong
+                  ><small>GPIO 19 · Field 8</small>
+                </div>
+                <span class="device-state" id="redState">--</span>
+              </div>
+            </div>
+            <div class="note-box">
+              <span>ⓘ</span>
+              <p>
+                Mức sương mù được ước lượng từ nhiệt độ và độ ẩm theo ngưỡng
+                trong chương trình ESP32, không phải phép đo khí tượng chuyên
+                dụng.
+              </p>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel charts-panel" id="charts">
+          <div class="panel-heading chart-heading">
+            <div>
+              <span class="section-kicker">SENSOR ANALYTICS</span>
+              <h2>Lịch sử dữ liệu cảm biến</h2>
+              <p class="panel-subtitle">
+                Các điểm dữ liệu gần nhất được lưu trên ThingSpeak.
+              </p>
+            </div>
+            <label class="select-wrap"
+              >Số mẫu<select id="sampleCount">
+                <option value="20">20 mẫu</option>
+                <option value="50" selected>50 mẫu</option>
+                <option value="100">100 mẫu</option>
+              </select></label
+            >
+          </div>
+          <div class="chart-grid">
+            <div class="chart-card">
+              <div class="chart-title">
+                <span class="chart-dot orange-bg"></span>
+                <div><strong>Nhiệt độ</strong><small>Đơn vị: °C</small></div>
+              </div>
+              <div class="chart-wrap">
+                <canvas
+                  id="temperatureChart"
+                  aria-label="Biểu đồ nhiệt độ"
+                ></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title">
+                <span class="chart-dot blue-bg"></span>
+                <div><strong>Độ ẩm</strong><small>Đơn vị: %</small></div>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="humidityChart" aria-label="Biểu đồ độ ẩm"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title">
+                <span class="chart-dot violet-bg"></span>
+                <div>
+                  <strong>Giá trị cảm biến LDR</strong
+                  ><small>Giá trị ADC (0–4095)</small>
+                </div>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="ldrChart" aria-label="Biểu đồ LDR"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title">
+                <span class="chart-dot green-bg"></span>
+                <div>
+                  <strong>Mức sương mù</strong
+                  ><small>0 = thấp · 1 = trung bình · 2 = cao</small>
+                </div>
+              </div>
+              <div class="chart-wrap">
+                <canvas
+                  id="fogChart"
+                  aria-label="Biểu đồ mức sương mù"
+                ></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel recent-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="section-kicker">RECENT ENTRIES</span>
+              <h2>Dữ liệu mới nhận</h2>
+            </div>
+            <span class="section-note" id="recordCount">0 bản ghi</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Thời gian</th>
+                  <th>Nhiệt độ</th>
+                  <th>Độ ẩm</th>
+                  <th>LDR</th>
+                  <th>Sương mù</th>
+                  <th>Trời tối</th>
+                  <th>Đèn vàng</th>
+                </tr>
+              </thead>
+              <tbody id="recentRows">
+                <tr>
+                  <td colspan="7" class="empty-cell">
+                    Đang tải dữ liệu từ ThingSpeak...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <footer>
+          <span>StreetSense <b>·</b> ESP32 + ThingSpeak</span
+          ><span
+            >Dashboard phục vụ mô phỏng và học tập
+            <span class="footer-heart">♥</span></span
+          >
+        </footer>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
