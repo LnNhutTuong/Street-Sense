@@ -16,12 +16,17 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./theme-dark.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <div class="app-shell">
       <aside class="sidebar">
-        <a class="brand" href="#" aria-label="Smart Streetlight trang chủ">
+        <a
+          class="brand"
+          href="#overview"
+          aria-label="Smart Streetlight trang chủ"
+        >
           <span class="brand-mark">✦</span>
           <span
             ><strong>Street<span>Sense</span></strong
@@ -29,11 +34,17 @@
           >
         </a>
         <div class="side-label">MENU CHÍNH</div>
-        <a class="nav-item active" href="#overview"><span>▦</span> Tổng quan</a>
-        <a class="nav-item" href="#charts"><span>⌁</span> Biểu đồ cảm biến</a>
-        <a class="nav-item" href="#devices"
-          ><span>☼</span> Trạng thái thiết bị</a
-        >
+        <nav class="side-navigation" aria-label="Điều hướng chính">
+          <a class="nav-item" href="#overview" aria-current="page"
+            ><span aria-hidden="true">▦</span> Tổng quan</a
+          >
+          <a class="nav-item" href="#devices"
+            ><span aria-hidden="true">☼</span> Trạng thái thiết bị</a
+          >
+          <a class="nav-item" href="#charts"
+            ><span aria-hidden="true">⌁</span> Biểu đồ cảm biến</a
+          >
+        </nav>
         <div class="sidebar-bottom">
           <div class="connection-card">
             <span class="pulse-dot"></span>
@@ -245,7 +256,7 @@
               <div class="device-row">
                 <span class="device-symbol blue-symbol">●</span>
                 <div class="device-name">
-                  <strong>Đèn xanh cảnh báo</strong
+                  <strong>Đèn xanh phá sương</strong
                   ><small>GPIO 23 · Field 7</small>
                 </div>
                 <span class="device-state" id="blueState">--</span>
@@ -253,7 +264,7 @@
               <div class="device-row">
                 <span class="device-symbol red-symbol">●</span>
                 <div class="device-name">
-                  <strong>Đèn đỏ phá sương</strong
+                  <strong>Đèn đỏ cảnh báo</strong
                   ><small>GPIO 19 · Field 8</small>
                 </div>
                 <span class="device-state" id="redState">--</span>

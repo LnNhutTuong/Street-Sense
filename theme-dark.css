@@ -1,0 +1,424 @@
+/* Theme tối cân bằng + cỡ chữ vừa đọc. Nạp SAU style.css. */
+:root {
+  color-scheme: dark;
+  --bg: #0b1120;
+  --sidebar: #0d1527;
+  --panel: #111c30;
+  --panel-soft: #0e192b;
+  --panel2: #0e192b;
+  --line: #24324a;
+  --text: #eef3ff; /* tiêu đề, số liệu */
+  --text-2: #c5d1e3; /* chữ nội dung */
+  --muted: #93a3bd; /* chú thích */
+  --blue: #67a7ff;
+  --green: #3bd6a1;
+  --orange: #ffb35c;
+  --red: #ff6d7d;
+  --violet: #a99bff;
+  --shadow: 0 10px 30px rgb(0 0 0 / 35%);
+}
+
+body {
+  background:
+    radial-gradient(
+      ellipse at 92% 0%,
+      rgb(67 135 217 / 14%),
+      transparent 32rem
+    ),
+    var(--bg);
+  font-size: 15px;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  background:
+    radial-gradient(circle at 15% 0%, rgb(74 123 172 / 16%), transparent 19rem),
+    linear-gradient(180deg, #111e34, #0c1626 80%);
+}
+.brand small {
+  font-size: 10.5px;
+}
+.side-label,
+.channel-label,
+.eyebrow,
+.section-kicker,
+.tiny-label {
+  font-size: 11px;
+}
+.nav-item {
+  font-size: 15px;
+}
+.connection-card strong {
+  font-size: 13px;
+}
+.connection-card small {
+  font-size: 11.5px;
+}
+.channel-id {
+  font-size: 15px;
+}
+
+/* ---------- Topbar ---------- */
+.eyebrow {
+  color: #7f9bb8;
+}
+.topbar h1 {
+  color: var(--text);
+}
+.subtitle {
+  font-size: 14.5px;
+  color: var(--muted);
+}
+.live-badge {
+  background: rgb(59 214 161 / 12%);
+  border-color: rgb(59 214 161 / 30%);
+  color: var(--green);
+  font-size: 10.5px;
+}
+.live-badge i {
+  background: var(--green);
+  box-shadow: 0 0 0 3px rgb(59 214 161 / 18%);
+}
+.last-update .muted {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.last-update strong {
+  color: #d5e0f0;
+  font-size: 13.5px;
+}
+.icon-button {
+  background: #16233a;
+  border-color: var(--line);
+  color: #9fc4e6;
+  box-shadow: none;
+}
+.icon-button:hover {
+  background: #1d2f4b;
+}
+
+.status-strip {
+  background: linear-gradient(100deg, #13213a, #111c30);
+  border-color: var(--line);
+  color: #a9b9ce;
+  font-size: 12.5px;
+}
+.status-right {
+  color: #8fa1b8;
+}
+.tiny-label {
+  color: #8fa8c0;
+  font-size: 10.5px;
+}
+.divider {
+  background: #2c3e5a;
+}
+
+/* ---------- Headings ---------- */
+.section-kicker {
+  color: #7fa3c2;
+}
+.section-heading h2,
+.panel-heading h2 {
+  color: var(--text);
+  font-size: 20px;
+}
+.section-note,
+.panel-subtitle {
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+/* ---------- Metric cards ---------- */
+.metric-icon.orange {
+  background: rgb(255 179 92 / 14%);
+  color: var(--orange);
+}
+.metric-icon.blue {
+  background: rgb(103 167 255 / 14%);
+  color: var(--blue);
+}
+.metric-icon.violet {
+  background: rgb(169 155 255 / 14%);
+  color: var(--violet);
+}
+.metric-icon.green {
+  background: rgb(59 214 161 / 14%);
+  color: var(--green);
+}
+.metric-label {
+  color: #a9b8cd;
+  font-size: 11px;
+}
+.metric-trend {
+  color: #7f90a8;
+  font-size: 10px;
+}
+.metric-value {
+  color: var(--text);
+}
+.metric-value small {
+  color: #8fa0b6;
+  font-size: 14px;
+}
+.metric-foot {
+  border-top-color: var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+.fog-value strong {
+  color: var(--text);
+  font-size: 22px;
+}
+
+/* ---------- Panels ---------- */
+.panel-icon {
+  background: #16253d;
+  border-color: var(--line);
+  color: #8fb3d4;
+}
+.streetlight-status {
+  border-bottom-color: var(--line);
+}
+.streetlight-illustration {
+  background: linear-gradient(
+    180deg,
+    transparent 60%,
+    #24324a 61%,
+    #24324a 64%,
+    transparent 65%
+  );
+}
+.lamp {
+  background: #6f84a0;
+}
+.lamp:before {
+  box-shadow: 0 0 14px rgb(234 182 87 / 55%);
+}
+.road-line {
+  border-top-color: #3a4c68;
+}
+.streetlight-summary strong {
+  color: var(--text);
+  font-size: 26px;
+}
+.streetlight-summary > span {
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.progress-track {
+  background: #1d2c45;
+}
+
+.device-row {
+  border-bottom-color: var(--line);
+}
+.yellow-symbol {
+  color: #ffc65c;
+}
+.red-symbol {
+  color: var(--red);
+}
+.blue-symbol {
+  color: var(--blue);
+}
+.device-name strong {
+  color: #e1e9f6;
+  font-size: 14px;
+}
+.device-name small {
+  color: #8ea0b8;
+  font-size: 12px;
+}
+.device-state {
+  font-size: 11px;
+}
+.device-state.on {
+  color: var(--green);
+}
+.device-state.off {
+  color: #7f90a8;
+}
+
+.ambient-state {
+  background: var(--panel2);
+  border-color: var(--line);
+}
+.ambient-icon {
+  color: #8fb3d4;
+}
+.ambient-state strong {
+  color: #e1e9f6;
+  font-size: 14px;
+}
+.ambient-state small {
+  color: #8ea0b8;
+  font-size: 11.5px;
+}
+.state-pill {
+  background: rgb(59 214 161 / 14%);
+  color: var(--green);
+  font-size: 11px;
+}
+.state-pill.dark {
+  background: rgb(255 179 92 / 14%);
+  color: var(--orange);
+}
+
+/* ---------- Fog banner ---------- */
+.fog-banner {
+  background: linear-gradient(110deg, #13223a, #101b2f);
+  border-color: var(--line);
+}
+.fog-art span {
+  background: #2b4565;
+}
+.fog-banner .tiny-label {
+  color: #8fa8c0;
+}
+.fog-banner strong {
+  color: #cfe3f5;
+  font-size: 17px;
+}
+.fog-banner small {
+  color: #93a5bb;
+  font-size: 12.5px;
+}
+.fog-banner.level-high {
+  background: rgb(255 109 125 / 10%);
+  border-color: rgb(255 109 125 / 35%);
+}
+.fog-banner.level-medium {
+  background: rgb(255 179 92 / 10%);
+  border-color: rgb(255 179 92 / 35%);
+}
+.fog-banner.level-low {
+  background: rgb(59 214 161 / 10%);
+  border-color: rgb(59 214 161 / 30%);
+}
+.fog-banner.level-high strong {
+  color: #ff9aa5;
+}
+.fog-banner.level-medium strong {
+  color: #ffc983;
+}
+.fog-banner.level-low strong {
+  color: #5fe3b8;
+}
+.fog-banner.level-high .fog-art span {
+  background: rgb(255 109 125 / 40%);
+}
+.fog-banner.level-medium .fog-art span {
+  background: rgb(255 179 92 / 40%);
+}
+.fog-banner.level-low .fog-art span {
+  background: rgb(59 214 161 / 40%);
+}
+
+.note-box {
+  background: var(--panel2);
+  border-color: var(--line);
+  color: var(--muted);
+}
+.note-box > span {
+  color: #7fa3c2;
+}
+.note-box p {
+  font-size: 12.5px;
+}
+
+/* ---------- Charts ---------- */
+.select-wrap {
+  color: var(--muted);
+  font-size: 12px;
+}
+.select-wrap select {
+  background: #16233a;
+  border-color: var(--line);
+  color: #dbe6f5;
+  font-size: 13px;
+}
+.chart-card {
+  background: var(--panel2);
+  border-color: var(--line);
+}
+.chart-title strong {
+  color: #dbe6f5;
+  font-size: 14px;
+}
+.chart-title small {
+  color: #8ea0b8;
+  font-size: 11.5px;
+}
+.blue-bg {
+  background: var(--blue);
+}
+
+/* ---------- Table ---------- */
+.table-wrap {
+  border-color: var(--line);
+}
+th {
+  background: #14223a;
+  color: var(--muted);
+  font-size: 11px;
+}
+td {
+  border-top-color: var(--line);
+  color: var(--text-2);
+  font-size: 13.5px;
+}
+tbody tr:hover {
+  background: #15243c;
+}
+.table-tag {
+  background: #1b2a42;
+  color: var(--muted);
+  font-size: 11px;
+}
+.table-tag.high {
+  background: rgb(255 109 125 / 15%);
+  color: #ff8d99;
+}
+.table-tag.medium {
+  background: rgb(255 179 92 / 15%);
+  color: #ffc27a;
+}
+.table-tag.low {
+  background: rgb(59 214 161 / 15%);
+  color: var(--green);
+}
+.empty-cell {
+  color: #8ea0b8;
+}
+.error-message {
+  color: #ff8d99;
+}
+
+/* ---------- Footer / toast ---------- */
+footer {
+  color: #7f90a8;
+  font-size: 12px;
+}
+footer b {
+  color: #4a5d78;
+}
+.footer-heart {
+  color: #ff8d99;
+}
+.toast {
+  background: #1a2a44;
+  border-color: #2c3e5a;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 45%);
+  color: var(--text);
+  font-size: 14px;
+}
+
+@media (max-width: 560px) {
+  .metric-label {
+    font-size: 10px;
+  }
+  .metric-foot {
+    font-size: 11px;
+  }
+}

@@ -271,7 +271,9 @@
           borderWidth: 1,
           titleColor: "#eaf1ff",
           bodyColor: "#bdcbe0",
-          padding: 11,
+          padding: 12,
+          titleFont: { size: 13 },
+          bodyFont: { size: 13 },
           displayColors: false,
         },
       },
@@ -283,7 +285,7 @@
             color: "#7f90aa",
             maxTicksLimit: 6,
             maxRotation: 0,
-            font: { size: 9 },
+            font: { size: 12 },
           },
         },
         y: {
@@ -291,7 +293,7 @@
           ...(stepSize ? { ticks: { stepSize } } : {}),
           grid: { color: "#223149" },
           border: { display: false },
-          ticks: { color: "#7f90aa", font: { size: 9 } },
+          ticks: { color: "#7f90aa", font: { size: 12 } },
           title: { display: false, text: yTitle, color: "#7f90aa" },
         },
       },
@@ -437,12 +439,99 @@
   $("sampleCount").addEventListener("change", () => loadData({ manual: true }));
   $("copyChannel").addEventListener("click", async () => {
     try {
-      await navigator.clipboard.writeText(CHANNEL_ID);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(CHANNEL_ID);
+      } else {
+        const field = document.createElement("textarea");
+        field.value = CHANNEL_ID;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.opacity = "0";
+        document.body.append(field);
+        field.select();
+        const copied = document.execCommand("copy");
+        field.remove();
+        if (!copied) throw new Error("Clipboard access is unavailable");
+      }
       showToast("Đã sao chép Channel ID.");
     } catch {
-      showToast(`Channel ID: ${CHANNEL_ID}`);
+      showToast(`Không thể sao chép. Channel ID: ${CHANNEL_ID}`);
     }
   });
+
+  const navigationLinks = Array.from(
+    document.querySelectorAll(".side-navigation .nav-item"),
+  );
+  const navigationSections = navigationLinks
+    .map((link) => document.querySelector(link.hash))
+    .filter(Boolean);
+
+  function setActiveNavigation(sectionId) {
+    navigationLinks.forEach((link) => {
+      const isActive = link.hash === `#${sectionId}`;
+      link.classList.toggle("active", isActive);
+      if (isActive) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+  }
+
+  let clickedSectionId = null; // mục người dùng vừa bấm
+  let scrollIdleTimer = null;
+
+  function isAtPageBottom() {
+    return (
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 4
+    );
+  }
+
+  function syncNavigationWithScroll() {
+    let currentSection = navigationSections[0];
+    navigationSections.forEach((section) => {
+      if (section.getBoundingClientRect().top <= 170) currentSection = section;
+    });
+
+    // Nếu trang đã cuộn hết cỡ mà mục vừa bấm không thể lên tới đỉnh,
+    // vẫn giữ mục đó là active (tránh bị nhảy về mục trước).
+    if (clickedSectionId && isAtPageBottom()) {
+      const clicked = document.getElementById(clickedSectionId);
+      if (clicked && clicked.getBoundingClientRect().top < window.innerHeight) {
+        currentSection = clicked;
+      }
+    }
+    if (currentSection) setActiveNavigation(currentSection.id);
+  }
+
+  navigationLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      clickedSectionId = link.hash.slice(1);
+      setActiveNavigation(clickedSectionId); // đổi active ngay khi bấm
+    });
+  });
+
+  // Trong lúc cuộn mượt sau khi bấm, không để scroll ghi đè active.
+  // Khi dừng cuộn ~150ms thì mới đồng bộ lại theo vị trí thật.
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!clickedSectionId) return syncNavigationWithScroll();
+      clearTimeout(scrollIdleTimer);
+      scrollIdleTimer = setTimeout(() => {
+        syncNavigationWithScroll();
+        clickedSectionId = null;
+      }, 150);
+    },
+    { passive: true },
+  );
+
+  // Back/Forward hoặc dán link có #hash
+  window.addEventListener("hashchange", () => {
+    const id = location.hash.slice(1);
+    if (navigationSections.some((section) => section.id === id)) {
+      setActiveNavigation(id);
+    }
+  });
+  syncNavigationWithScroll();
 
   loadData();
   refreshTimer = setInterval(() => loadData(), REFRESH_INTERVAL_MS);
