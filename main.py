@@ -11,8 +11,9 @@ import ntptime
 # 1. CAU HINH WIFI
 # ============================================================
 
-WIFI_SSID = "Wokwi-GUEST"
-WIFI_PASSWORD = ""
+# Thong tin Wi-Fi va Write API Key nam trong secrets.py (KHONG commit len GitHub).
+# Tao secrets.py tu mau secrets.example.py
+from secrets import WIFI_SSID, WIFI_PASSWORD, THINGSPEAK_API_KEY
 
 wifi = network.WLAN(network.STA_IF)
 wifi.active(True)
@@ -46,9 +47,6 @@ else:
 # 2. CAU HINH THINGSPEAK
 # ============================================================
 
-# Thay bang Write API Key moi cua Channel
-THINGSPEAK_API_KEY = "KGXM6DJ3NX0FQLZX"
-
 THINGSPEAK_URL = "http://api.thingspeak.com/update"
 
 # Gui du lieu moi 15 giay
@@ -80,10 +78,10 @@ yellow_leds = [
     Pin(18, Pin.OUT)
 ]
 
-# Den pha suong
+# Den do canh bao (nhap nhay khi suong mu CAO)
 red_led = Pin(19, Pin.OUT)
 
-# Den canh bao suong mu
+# Den xanh pha suong (bat khi suong mu TRUNG BINH / CAO)
 blue_led = Pin(23, Pin.OUT)
 
 # Tat tat ca den khi khoi dong
@@ -295,7 +293,7 @@ while True:
                 fog_level = 2
                 fog_name = "CAO"
 
-                # Den canh bao mau xanh sang
+                # Den xanh pha suong sang
                 blue_led.value(1)
 
                 # Den do nhap nhay khong dung sleep
@@ -335,6 +333,7 @@ while True:
 
             blue_led.value(0)
             red_led.value(0)
+            red_ledState = 0
             blink_state = 0
 
 

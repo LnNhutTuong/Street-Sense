@@ -1,0 +1,17 @@
+# Thong tin bi mat
+secrets.py
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+
+# Editor / he dieu hanh
+.vscode/
+.idea/
+.DS_Store
+
+# Cong cu
+node_modules/
+.vercel/
